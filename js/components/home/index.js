@@ -1,80 +1,71 @@
-
+//import liraries
 import React, { Component } from 'react';
-import { TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
-import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right } from 'native-base';
-import { Grid, Row } from 'react-native-easy-grid';
+// import { View } from 'react-native';
+import { Footer, FooterTab, Button, Text, View } from 'native-base';
 
-import { setIndex } from '../../actions/list';
-import { openDrawer } from '../../actions/drawer';
-import styles from './styles';
-
-
-class Home extends Component {
-
-  static propTypes = {
-    name: React.PropTypes.string,
-    setIndex: React.PropTypes.func,
-    list: React.PropTypes.arrayOf(React.PropTypes.string),
-    openDrawer: React.PropTypes.func,
-  }
-
-  newPage(index) {
-    this.props.setIndex(index);
-    Actions.blankPage();
-  }
-
-  render() {
-    return (
-      <Container style={styles.container}>
-        <Header>
-          <Left>
-            <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
-              <Icon active name="power" />
-            </Button>
-          </Left>
-
-          <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Home'}</Title>
-          </Body>
-
-          <Right>
-            <Button transparent onPress={this.props.openDrawer}>
-              <Icon active name="menu" />
-            </Button>
-          </Right>
-        </Header>
-
-        <Content>
-          <Grid style={styles.mt}>
-            {this.props.list.map((item, i) =>
-              <Row key={i}>
-                <TouchableOpacity
-                  style={styles.row}
-                  onPress={() => this.newPage(i)}
-                >
-                  <Text style={styles.text}>{item}</Text>
-                </TouchableOpacity>
-              </Row>
-            )}
-          </Grid>
-        </Content>
-      </Container>
-    );
-  }
+import MapView from 'react-native-maps';
+import {connect} from "react-redux";
+// import styles from "./styles";
+// create a component
+class HomeComponent extends Component {
+    render() {
+        console.log(this.props);
+        return (
+            <View style={styles.container}>
+                <MapView style={styles.mapView}
+                    initialRegion={{
+                        latitude: 37.78825,
+                        longitude: -122.4324,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                />
+                <Footer style={styles.toolbar}>
+                    <FooterTab>
+                        <Button>
+                            <Text>Apps</Text>
+                        </Button>
+                        <Button>
+                            <Text>Camera</Text>
+                        </Button>
+                        <Button active>
+                            <Text>Navigate</Text>
+                        </Button>
+                        <Button>
+                            <Text>Contact</Text>
+                        </Button>
+                    </FooterTab>
+                </Footer>
+            </View>
+        );
+    }
 }
 
-function bindAction(dispatch) {
-  return {
-    setIndex: index => dispatch(setIndex(index)),
-    openDrawer: () => dispatch(openDrawer()),
-  };
+const styles = {
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+    },
+    mapView: {
+        flex: 1,
+        backgroundColor: "red",
+        alignSelf: 'stretch',
+        // width: 300,
+        // height: 200
+    },
+    // toolbar: {
+    //     flex: 0.1,
+    //     flexDirection: "row",
+    // }
 }
 
-const mapStateToProps = state => ({
-  name: state.user.name,
-  list: state.list.list,
-});
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    };
+}
 
-export default connect(mapStateToProps, bindAction)(Home);
+//make this component available to the app
+export default connect(mapStateToProps)(HomeComponent);

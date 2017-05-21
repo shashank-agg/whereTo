@@ -8,7 +8,7 @@ class SplashComponent extends Component {
 
     componentDidMount() {
         setTimeout(function() {
-            // Actions.login();
+            Actions.login();
         }, 1000);
     }
 

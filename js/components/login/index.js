@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { Container, Content, Item, Input, Button, Icon, View, Text } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
-import { setUser } from '../../actions/user';
+// import { setUser } from '../../actions/user';
 import styles from './styles';
 
 
-const background = require('../../../images/shadow.png');
+const background = require('../../../images/globe.jpg');
 
 class Login extends Component {
 
@@ -19,51 +19,68 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      name: '',
-    };
+    this.loginClicked = this.loginClicked.bind(this);
   }
 
-  setUser(name) {
-    this.props.setUser(name);
+  setUsername(username) {
+    this.props.dispatch({type: "SET_USERNAME", payload: username});
+  }
+
+  setPassword(password) {
+    this.props.dispatch({type: "SET_PASSWORD", payload: password});
+  }
+
+  saveNewUser() {
+    console.log("saved user to DB");
+    return true;
+  }
+
+  loginClicked = () => {
+    // alert(this.props.user.username);
+    if (this.saveNewUser()) {
+      Actions.home();
+    }
   }
 
 
   render() {
+    console.log("my props", this.props);
     return (
-      <Container>
         <View style={styles.container}>
-          <Content>
-            <Image source={background} style={styles.shadow}>
-              <View style={styles.bg}>
+          <View style={styles.image1Container}>
+            <Image source={background} style={styles.image1}></Image>
+          </View>
+          <View style={styles.formContainer}>
                 <Item style={styles.input}>
                   <Icon active name="person" />
-                  <Input placeholder="EMAIL" onChangeText={name => this.setState({ name })} />
+                  <Input placeholder="Email" onChangeText={name => this.setUsername(name)} />
                 </Item>
                 <Item style={styles.input}>
                   <Icon name="unlock" />
-                  <Input
-                    placeholder="PASSWORD"
-                    secureTextEntry
+                  <Input placeholder="Password" secureTextEntry onChangeText={password => this.setPassword(password)}
                   />
                 </Item>
-                <Button style={styles.btn} onPress={() => Actions.home()}>
+                <Button block style={styles.loginButton} onPress={this.loginClicked}>
                   <Text>Login</Text>
                 </Button>
-              </View>
-            </Image>
-          </Content>
+            </View>
         </View>
-      </Container>
     );
   }
 }
 
-function bindActions(dispatch) {
+// function bindActions(dispatch) {
+//   return {
+//     setUser: name => dispatch(setUser(name)),
+//   };
+// }
+
+function mapStateToProps(state) {
+  console.log("in mapStateToProps", state);
   return {
-    setUser: name => dispatch(setUser(name)),
+    user: state.user
   };
 }
 
 
-export default connect(null, bindActions)(Login);
+export default connect(mapStateToProps, null)(Login);

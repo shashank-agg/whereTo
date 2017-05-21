@@ -1,38 +1,27 @@
-
-const React = require('react-native');
-
-const { StyleSheet, Dimensions } = React;
-
-const deviceHeight = Dimensions.get('window').height;
-
 export default {
   container: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#FBFAFA',
-  },
-  shadow: {
     flex: 1,
-    width: null,
-    height: null,
+    justifyContent: "space-between"
   },
-  bg: {
+  image1Container: {
+    flex: 2,
+    // backgroundColor: "red",
+    // padding: 10
+  },
+  image1: {
     flex: 1,
-    marginTop: deviceHeight / 1.75,
-    paddingTop: 20,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 30,
-    bottom: 0,
+    width: 250,
+    height: 250,
+    resizeMode: 'contain',
+    alignSelf: "center"
   },
-  input: {
-    marginBottom: 20,
+  formContainer: {
+    flex: 1,
+    justifyContent: "center",
+    margin: 20,
+    // backgroundColor: "yellow"
   },
-  btn: {
-    marginTop: 20,
-    alignSelf: 'center',
-  },
+  loginButton: {
+    marginTop: 30
+  }
 };
