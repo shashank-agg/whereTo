@@ -8,15 +8,14 @@ class SplashComponent extends Component {
 
     componentDidMount() {
         setTimeout(function() {
-            Actions.login();
-        }, 1000);
+            Actions.home();
+        }, 100);
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Image source={require('../../../images/splash1.jpg')} style={styles.backgroundImage}>
-                </Image>
+                <Image source={require('../../../images/splash1.jpg')} style={styles.backgroundImage}/>
                 <View style={styles.overlay}>     
                     <Text style={styles.titleText}>WhereTo?</Text>
                 </View>

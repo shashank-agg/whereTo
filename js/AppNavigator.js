@@ -8,7 +8,9 @@ import { Router, Scene } from 'react-native-router-flux';
 import { closeDrawer } from './actions/drawer';
 
 import Login from './components/login/';
-import Home from './components/home/';
+import Home from './components/home/HomeComponent';
+import AddEventComponent from './components/addEvent/AddEventComponent';
+import EventComponent from './components/event/EventComponent';
 import SplashComponent from './components/splash/SplashComponent';
 import BlankPage from './components/blankPage';
 import SideBar from './components/sideBar';
@@ -94,9 +96,11 @@ class AppNavigator extends Component {
         />
         <RouterWithRedux>
           <Scene key="root">
-            <Scene key="splash" component={SplashComponent} hideNavBar />
+            <Scene key="splash" component={SplashComponent} hideNavBar initial/>
             <Scene key="login" component={Login} hideNavBar />
-            <Scene key="home" component={Home} initial hideNavBar/>
+            <Scene key="home" component={Home} hideNavBar />
+            <Scene key="event" component={EventComponent}/>
+            <Scene key="addEvent" component={AddEventComponent} hideNavBar/>
             <Scene key="blankPage" component={BlankPage} />
           </Scene>
         </RouterWithRedux>
