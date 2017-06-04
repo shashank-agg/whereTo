@@ -1,30 +1,30 @@
 //import liraries
 import React, { Component } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
-import { Footer, FooterTab, Button, Text, View } from 'native-base';
-import {Actions} from "react-native-router-flux" 
+import { Image, TouchableOpacity, Animated, TouchableHighlight} from 'react-native';
+import { Footer, FooterTab, Button, Text, View, Picker} from 'native-base';
+import {Actions} from "react-native-router-flux";
 
 import MapView from 'react-native-maps';
 import {connect} from "react-redux";
-// import styles from "./styles";
 
 const { StyleSheet } = React;
 
 import api from "../../services/api.js";
-// create a component
+import {getMarkerDimensions} from "../../util/utils.js";
+import DrawyerComponent from "./DrawyerComponent.js";
 class HomeComponent extends Component {
 
     constructor(props) {
         super(props);
         this.openEvent = this.openEvent.bind(this);
         this.mapClicked = this.mapClicked.bind(this);
+        this.state = {
+            selectedCategory: 'all'
+        }
     }
 
     componentWillMount() {
-        // const eventList = api.getEventList();
         this.props.dispatch({type: "FETCH_ALL_EVENTS"});
-        // this.setState({eventList});
-        // Actions.event(eventList[0]); //DEBUG
     }
 
     openEvent(event) {
@@ -38,9 +38,17 @@ class HomeComponent extends Component {
         // alert(coord.latitude);
     }
 
+    onValueChange (value) {
+        this.setState({
+            selectedCategory : value
+        });
+    }
+
     render() {
-        // debugger;
-        console.log(this.props);
+        const filterEventsByCategory = (event) => {
+            return this.state.selectedCategory === "all" ? true : (event.eventCategory === this.state.selectedCategory);
+        }
+
         return (
             <View style={styles.container}>
                 <MapView style={styles.mapView}
@@ -54,10 +62,10 @@ class HomeComponent extends Component {
                     showsPointsOfInterest={true}
                 >
                 {
-                    this.props.events.eventList.map((event, index) => (
+                    this.props.events.eventList.filter(filterEventsByCategory).map((event, index) => (
                     <MapView.Marker key={index} coordinate={event.latlng} title={event.eventName} description="Some desc" onCalloutPress={() => {this.openEvent(event)}}>
                         <View>
-                            <Image source = {require('../../../images/marker.png')} style={styles.marker}/>
+                            <Image source = {require('../../../images/marker.png')} style={{...styles.marker, ...getMarkerDimensions(event)}}/>
                         </View>
                         <MapView.Callout style={styles.markerPopup}>
                             <TouchableOpacity> 
@@ -65,8 +73,17 @@ class HomeComponent extends Component {
                             </TouchableOpacity>
                         </MapView.Callout>
                     </MapView.Marker>
-                ), this)}
-            </MapView>
+                    ), this)}
+                </MapView>
+                <Picker
+                    style={styles.picker}
+                    selectedValue={this.state.selectedCategory}
+                    onValueChange={this.onValueChange.bind(this)}>
+                    <Picker.Item label="All Events" value="all" />
+                    <Picker.Item label="Recreation" value="recreation" />
+                    <Picker.Item label="Social" value="social" />
+                    <Picker.Item label="Utility" value="utility" />
+                </Picker>
             </View>
         );
     }
@@ -74,7 +91,7 @@ class HomeComponent extends Component {
 
 const styles = {
     container: {
-        // flex: 1,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
@@ -83,6 +100,14 @@ const styles = {
         right: 0,
         top: 0,
         bottom: 0,
+    },
+    subView: {
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: "#FFFFFF",
+        height: 100,
     },
     mapView: {
         flex: 1,
@@ -102,6 +127,10 @@ const styles = {
     },
     markerPopup: {
         minWidth: 200
+    },
+    picker: {
+        height: 50,
+        alignSelf: 'stretch',
     }
 }
 

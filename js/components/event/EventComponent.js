@@ -3,14 +3,26 @@ import React, { Component } from 'react';
 import { Image,ScrollView,View } from 'react-native';
 // import * as nb from 'native-base';
 import { Container, Header, Title, Content, Footer, Card, CardItem, Text, FooterTab, Button, Left, Right, Body, Icon, H1,H3,H2 } from 'native-base';
-import {Actions} from "react-native-router-flux" 
+import {Actions} from "react-native-router-flux";
+import {connect} from "react-redux";
 // create a component
 
 class EventComponent extends Component {
 
+    constructor(props) {
+        super(props);
+        this.interestedClicked = this.interestedClicked.bind(this);
+    }
+
     handleBackButton() {
         Actions.pop();
     }
+
+    interestedClicked() {
+        this.props.dispatch({type: "INCREASE_EVENT_INTEREST", eventID: this.props.eventID});
+        Actions.home();
+    }
+
     render() {
         return (
             <Container>
@@ -82,7 +94,7 @@ class EventComponent extends Component {
                 </Content>
                 <Footer>
                     <FooterTab>
-                        <Button full info >
+                        <Button full info onPress={this.interestedClicked}>
                             <Text style={styles.footerButtonText}>I'm interested!</Text>
                         </Button>
                     </FooterTab>
@@ -124,4 +136,4 @@ const styles = {
 };
 
 //make this component available to the app
-export default EventComponent;
+export default connect()(EventComponent);

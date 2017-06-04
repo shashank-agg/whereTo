@@ -38,6 +38,7 @@ class AddEventComponent extends Component {
             location: this.state.location,
             startTime: this.state.startTime,
             endTime: this.state.endTime,
+            interestedCount: 1,
             imgUrls:[]
         };
         // api.addEvent(newEvent);
